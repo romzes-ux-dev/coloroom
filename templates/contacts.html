@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load coloroom %}
+{% block title %}Контакты — {{ site.site_name }}{% endblock %}
+{% block header_class %}header--overlay{% endblock %}
+{% block content %}
+<section class="hero" aria-label="Баннер">
+  <div class="frame svc-banner">
+    {% if site.service_banner %}<img class="frame__img" data-parallax="1" src="{{ site.service_banner.url }}" alt="">{% endif %}
+  </div>
+</section>
+
+<section class="ct">
+  <h1 class="sr-only">Контакты</h1>
+  <div class="ct__grid">
+    <div class="ct__col">
+      <h2 class="ct__title">{{ site.footer_left_title }}</h2>
+      {% for b in footer_coop %}
+        <div class="ct__item{% if b.text|length > 60 %} ct__item--long{% endif %}"><h3>{{ b.label }}</h3><p>{{ b.text|contact }}</p></div>
+      {% endfor %}
+    </div>
+    <div class="ct__col">
+      <h2 class="ct__title">{{ site.footer_right_title }}</h2>
+      {% for b in footer_order %}
+        <div class="ct__item{% if b.text|length > 60 %} ct__item--long{% endif %}"><h3>{{ b.label }}</h3><p>{{ b.text|contact }}</p></div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

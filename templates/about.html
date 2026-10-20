@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load coloroom %}
+{% block title %}{{ about.title }} — {{ site.site_name }}{% endblock %}
+{% block header_class %}header--overlay{% endblock %}
+{% block main_class %}about-main{% endblock %}
+{% block content %}
+<section class="hero" aria-label="Баннер">
+  <div class="frame about-banner">
+    {% if about.banner %}<img class="frame__img" data-parallax="1" src="{{ about.banner.url }}" alt="">{% endif %}
+  </div>
+</section>
+
+<div class="wrap about-page">
+  <section class="g6 a-intro">
+    {% if about.lead %}<h1 class="a-lead">{{ about.lead }}</h1>{% else %}<h1 class="sr-only">{{ about.title }}</h1>{% endif %}
+    <div class="a-intro__text rich">{{ about.body|rich }}</div>
+  </section>
+
+  <div class="g6 a-main-row">
+    <div class="frame a-main">
+      {% if about.image %}<img class="frame__img" data-parallax="0.8" src="{{ about.image.url }}" alt="" loading="lazy">{% endif %}
+    </div>
+  </div>
+
+  {% if about.statement %}<p class="a-statement">{{ about.statement }}</p>{% endif %}
+
+  <section class="g6 a-block a-philosophy">
+    <div class="head"><h2>{{ about.philosophy_title }}</h2></div>
+    <div class="a-block__text rich">{{ about.philosophy_text|rich }}</div>
+    <div class="frame a-philosophy__photo">
+      {% if about.philosophy_image %}<img class="frame__img" data-parallax="0.8" src="{{ about.philosophy_image.url }}" alt="" loading="lazy">{% endif %}
+    </div>
+  </section>
+
+  <section class="g6 a-block a-team">
+    <div class="head"><h2>{{ about.team_title }}</h2></div>
+    <div class="frame a-team__photo">
+      {% if about.team_image %}<img class="frame__img" data-parallax="0.8" src="{{ about.team_image.url }}" alt="Команда студии" loading="lazy">{% endif %}
+    </div>
+    <div class="a-block__text rich">{{ about.team_text|rich }}</div>
+  </section>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Страница не найдена — {{ site.site_name }}{% endblock %}
+{% block main_class %}no-pad{% endblock %}
+{% block header_class %}header--overlay{% endblock %}
+{% block content %}
+<section class="hero" aria-label="Баннер">
+  <div class="frame svc-banner">
+    {% if site.service_banner %}<img class="frame__img" data-parallax="1" src="{{ site.service_banner.url }}" alt="">{% endif %}
+  </div>
+</section>
+
+<section class="nf">
+  <div class="nf__bg" aria-hidden="true">
+    <img class="frame__img nf__sketch" data-parallax="0.6" src="{% static 'img/house-sketch.svg' %}" alt="">
+  </div>
+  <div class="nf__inner">
+    <p class="nf__code" role="img" aria-label="404">404</p>
+    <h1 class="nf__title">Упс! Такой страницы не существует :(</h1>
+    <p class="nf__text">Проверьте правильность введённого адреса или вернитесь на главную</p>
+    <a class="more more--line nf__more" href="{% url 'home' %}"><span>На главную</span> {% include "_arrow.html" %}</a>
+  </div>
+</section>
+{% endblock %}

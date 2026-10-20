@@ -1,0 +1,63 @@
+{% load static coloroom %}<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.site_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta %}{{ site.meta_description }}{% endblock %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="header {% block header_class %}header--solid{% endblock %}">
+  <div class="header__inner">
+    <a class="logo" href="{% url 'home' %}" aria-label="{{ site.site_name }}">
+      {% if site.logo %}
+        <img class="logo__img" src="{{ site.logo.url }}" alt="{{ site.site_name }}">
+      {% else %}
+        <svg class="logo__mark" viewBox="0 0 32 32" aria-hidden="true">
+          <rect x="1.5" y="1.5" width="29" height="29" rx="7" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M16 1.5v29M1.5 16h29" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <span class="logo__word"><b>coloroom</b><i>interiors</i></span>
+      {% endif %}
+    </a>
+    <button class="burger" type="button" aria-label="Меню" aria-expanded="false" aria-controls="site-nav"><span></span><span></span></button>
+    <nav id="site-nav" class="nav-pair" aria-label="Основное меню">
+      <ul class="nav-left">
+        {% for item in menu_left %}<li><a href="{{ item.url }}"{% if item.active %} class="is-active" aria-current="page"{% endif %}{% if item.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ item.title }}</a></li>{% endfor %}
+      </ul>
+      <ul class="nav-right">
+        {% for item in menu_right %}<li><a href="{{ item.url }}"{% if item.active %} class="is-active" aria-current="page"{% endif %}{% if item.new_tab %} target="_blank" rel="noopener"{% endif %}>{{ item.title }}</a></li>{% endfor %}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main class="{% block main_class %}{% endblock %}">{% block content %}{% endblock %}</main>
+
+<footer class="footer">
+  <div class="footer__band">
+    <div class="frame footer__bg" aria-hidden="true">
+      {% if site.footer_bg %}<img class="frame__img" data-parallax="0.6" src="{{ site.footer_bg.url }}" alt="" loading="lazy">{% endif %}
+    </div>
+    <div class="footer__grid">
+      <section class="footer__col">
+        <h2 class="footer__title">{{ site.footer_right_title }}</h2>
+        {% for b in foot_order %}<div class="footer__item"><h3>{{ b.label }}</h3><p>{{ b.text|contact }}</p></div>{% endfor %}
+      </section>
+      <nav class="footer__nav" aria-label="Разделы сайта">
+        {% for item in menu_items %}<a href="{{ item.url }}">{{ item.title }}</a>{% endfor %}
+      </nav>
+      <section class="footer__col">
+        <h2 class="footer__title">{{ site.footer_left_title }}</h2>
+        {% for b in foot_coop %}<div class="footer__item"><h3>{{ b.label }}</h3><p>{{ b.text|contact }}</p></div>{% endfor %}
+      </section>
+    </div>
+  </div>
+  <div class="footer__bar"><p>{{ site.copyright_text }}</p></div>
+</footer>
+<script src="{% static 'js/main.js' %}" defer></script>
+<script src="{% static 'js/cursor.js' %}" defer></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

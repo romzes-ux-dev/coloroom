@@ -1,0 +1,6 @@
+<a class="card" href="{{ p.get_absolute_url }}">
+  <div class="frame card__frame">
+    {% if p.cover %}<img class="frame__img" data-parallax="0.8" src="{{ p.cover.url }}" alt="{{ p }}" loading="lazy">{% endif %}
+  </div>
+  <h3 class="card__title"><span class="t1">{{ p.title }}</span>{% if p.subtitle %} <span class="t2">{{ p.subtitle }}</span>{% endif %}</h3>
+</a>

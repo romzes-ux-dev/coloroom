@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load coloroom %}
+{% block title %}{{ project }} — {{ site.site_name }}{% endblock %}
+{% block meta %}{{ project.short_description }}{% endblock %}
+{% block header_class %}header--overlay{% endblock %}
+{% block content %}
+<section class="hero" aria-label="Баннер">
+  <div class="frame pj-banner">
+    {% if project.banner %}<img class="frame__img" data-parallax="1" src="{{ project.banner.url }}" alt="">
+    {% elif project.cover %}<img class="frame__img" data-parallax="1" src="{{ project.cover.url }}" alt="">{% endif %}
+  </div>
+</section>
+
+<header class="wrap g6 pj-head">
+  <h1 class="pj-title"><span class="t1">{{ project.title }}</span>{% if project.subtitle %} <span class="t2">{{ project.subtitle }}</span>{% endif %}</h1>
+  {% if project.plan_image %}<div class="pj-plan"><img src="{{ project.plan_image.url }}" alt="Планировка"></div>{% endif %}
+  <dl class="pj-meta">
+    {% if project.project_type %}<div><dt>Проект:</dt><dd>{{ project.project_type }}</dd></div>{% endif %}
+    {% if project.location %}<div><dt>Локация:</dt><dd>{{ project.location }}</dd></div>{% endif %}
+    {% if project.status %}<div><dt>Статус:</dt><dd>{{ project.status }}</dd></div>{% endif %}
+    {% if project.year %}<div><dt>Год:</dt><dd>{{ project.year }}</dd></div>{% endif %}
+    {% if project.plot_area %}<div><dt>Площадь участка:</dt><dd>{{ project.plot_area }}</dd></div>{% endif %}
+    {% if project.area %}<div><dt>Площадь помещения:</dt><dd>{{ project.area }}</dd></div>{% endif %}
+    {% if project.team %}<div class="pj-meta__team"><dt>Команда:</dt><dd>{{ project.team|team_lines }}</dd></div>{% endif %}
+  </dl>
+</header>
+
+{% for row in rows %}
+  {% if row.full %}
+    <section class="pb-row pb-row--full pb-space-{{ row.space }}">
+      <div class="frame pb-full"{% if row.full.image_width and row.full.image_height %} style="aspect-ratio: {{ row.full.image_width }} / {{ row.full.image_height }}"{% endif %}>
+        <img class="frame__img" data-parallax="0.8" src="{{ row.full.image.url }}" alt="" loading="lazy">
+      </div>
+      <div class="wrap g6 pb-overlay">
+        {% for it in row.items %}{% if it.kind == "text" %}
+          <div class="pb-text rich pb-a-{{ it.align }}{% if it.light_text %} is-light{% endif %}" style="grid-column: {{ it.col_start }} / span {{ it.col_span }}">{{ it.text|rich }}</div>
+        {% endif %}{% endfor %}
+      </div>
+    </section>
+  {% else %}
+    <section class="wrap g6 pb-row pb-space-{{ row.space }}">
+      {% for it in row.items %}
+        {% if it.kind == "image" and it.image %}
+          <div class="frame pb-img pb-a-{{ it.align }}{% if it.bring_to_front %} is-front{% endif %}" style="grid-column: {{ it.col_start }} / span {{ it.col_span }}{% if it.image_width and it.image_height %}; aspect-ratio: {{ it.image_width }} / {{ it.image_height }}{% endif %}">
+            <img class="frame__img" data-parallax="0.8" src="{{ it.image.url }}" alt="" loading="lazy">
+          </div>
+        {% elif it.kind == "text" %}
+          <div class="pb-text rich pb-a-{{ it.align }}{% if it.bring_to_front %} is-front{% endif %}{% if it.light_text %} is-light{% endif %}" style="grid-column: {{ it.col_start }} / span {{ it.col_span }}">{{ it.text|rich }}</div>
+        {% endif %}
+      {% endfor %}
+    </section>
+  {% endif %}
+{% endfor %}
+{% endblock %}

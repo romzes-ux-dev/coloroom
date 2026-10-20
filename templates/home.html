@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static coloroom %}
+{% block header_class %}header--overlay{% endblock %}
+{% block content %}
+{% if slider_projects %}
+{# Слайдер проектов: в него попадают проекты с галочкой «Показывать в слайдере на главной» #}
+<section class="hero pslider" data-slider tabindex="0" aria-roledescription="карусель" aria-label="Проекты студии">
+  <div class="pslider__slides">
+    {% for p in slider_projects %}
+    <article class="pslide{% if forloop.first %} is-on is-active{% endif %}" data-slide data-name="{{ p }}" aria-roledescription="слайд" aria-label="{{ forloop.counter }} из {{ slider_projects|length }}: {{ p }}">
+      <div class="pslide__media">
+        <div class="pslide__shift" data-parallax="0.3" data-mode="hero">
+          <img src="{{ p.cover.url }}" alt=""{% if not forloop.first %} loading="lazy"{% endif %} draggable="false">
+        </div>
+      </div>
+      <div class="pslide__dim"></div>
+      <div class="pslide__caption">
+        {% if p.subtitle %}<p class="pslide__eyebrow">{{ p.subtitle }}</p>{% endif %}
+        <h2 class="pslide__title">{{ p.title }}</h2>
+        <p class="pslide__meta">
+          {% if p.location %}<span>{{ p.location }}</span>{% endif %}
+          {% if p.year %}<span>{{ p.year }}</span>{% endif %}
+          <a class="pslide__more" href="{{ p.get_absolute_url }}">Смотреть проект</a>
+        </p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% if slider_projects|length > 1 %}
+  <div class="pslider__nav">
+    <span class="pslider__count" data-count aria-hidden="true">01 / {{ slider_projects|length|stringformat:"02d" }}</span>
+    <button class="pslider__btn" type="button" data-toggle aria-label="Остановить автосмену">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>
+    </button>
+    <button class="pslider__btn" type="button" data-prev aria-label="Предыдущий проект">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+    </button>
+    <button class="pslider__btn" type="button" data-next aria-label="Следующий проект">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
+    </button>
+  </div>
+  <div class="pslider__index">
+    {% for p in slider_projects %}
+    <button class="pslider__idx" type="button" data-idx aria-label="Проект {{ forloop.counter }}: {{ p }}"{% if forloop.first %} aria-current="true"{% endif %}>
+      <span class="pslider__bar"><i></i></span>
+      <span class="pslider__name">{{ forloop.counter|stringformat:"02d" }}&ensp;{{ p }}</span>
+    </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+</section>
+{% else %}
+<section class="hero" aria-label="Баннер">
+  <div class="frame hero__frame">
+    {% if site.hero_image %}<img class="frame__img frame__img--hero" data-parallax="0.3" data-mode="hero" src="{{ site.hero_image.url }}" alt="">{% endif %}
+  </div>
+</section>
+{% endif %}
+
+<section class="section wrap" id="about">
+  <div class="stagger">
+    <div class="head"><h2>{{ site.about_title }}</h2></div>
+    <p class="note">{{ site.about_note }}</p>
+    <div class="about__text rich">{{ site.about_short|rich }}</div>
+    <div class="frame about__small">
+      {% if site.about_image_small %}<img class="frame__img" data-parallax="0.8" src="{{ site.about_image_small.url }}" alt="" loading="lazy">{% endif %}
+    </div>
+    <div class="frame about__big">
+      {% if site.about_image %}<img class="frame__img" data-parallax="0.8" src="{{ site.about_image.url }}" alt="Интерьер студии" loading="lazy">{% endif %}
+    </div>
+    <a class="more more--line about__more" href="{% url 'about' %}"><span>{{ site.about_button }}</span> {% include "_arrow.html" %}</a>
+  </div>
+</section>
+
+<section class="section wrap" id="projects">
+  <div class="stagger">
+    <div class="head head--lg"><h2>{{ site.projects_title }}</h2></div>
+    <p class="note note--dark">{{ site.projects_note }}</p>
+  </div>
+  <div class="grid projects-grid">
+    {% for p in home_projects %}{% include "_project_card.html" %}{% endfor %}
+  </div>
+  <div class="projects-foot">
+    <p class="mid-text">{{ site.projects_middle_text }}</p>
+    <a class="more more--line projects__more" href="{% url 'projects' %}"><span>{{ site.projects_button }}</span> {% include "_arrow.html" %}</a>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}{% if slider_projects|length > 1 %}<script src="{% static 'js/slider.js' %}" defer></script>{% endif %}{% endblock %}

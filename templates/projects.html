@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ projects_page.title }} — {{ site.site_name }}{% endblock %}
+{% block header_class %}header--overlay{% endblock %}
+{% block content %}
+<section class="hero" aria-label="Баннер">
+  <div class="frame projects-banner">
+    {% if projects_page.banner %}<img class="frame__img" data-parallax="1" src="{{ projects_page.banner.url }}" alt="">{% endif %}
+  </div>
+</section>
+
+<div class="wrap projects-page" data-projects>
+  <h1 class="sr-only">{{ projects_page.title }}</h1>
+  <p class="p-intro">{{ projects_page.intro }}</p>
+
+  <form class="filters" method="get" action="{% url 'projects' %}" aria-label="Фильтры проектов">
+    <button type="button" class="filter filter--all{% if not has_filters %} is-active{% endif %}" data-reset>Все проекты</button>
+    {% for c in categories %}
+      <label class="filter filter--check">
+        <span>{{ c.name }}</span>
+        <input type="checkbox" name="category" value="{{ c.slug }}"{% if c.slug in selected_categories %} checked{% endif %}>
+        <i class="box" aria-hidden="true"></i>
+      </label>
+    {% endfor %}
+    {% if years %}
+      <label class="filter filter--year">
+        <span class="sr-only">Год</span>
+        <select name="year" aria-label="Год">
+          <option value="">Год</option>
+          {% for y in years %}<option value="{{ y }}"{% if y|stringformat:"s" == selected_year %} selected{% endif %}>{{ y }}</option>{% endfor %}
+        </select>
+      </label>
+    {% endif %}
+    <noscript><button class="btn" type="submit">Показать</button></noscript>
+  </form>
+
+  <div data-results>
+    <div class="grid projects-grid" data-grid>
+      {% for p in projects %}{% include "_project_card.html" %}{% empty %}<p class="empty">По выбранным фильтрам проектов пока нет.</p>{% endfor %}
+    </div>
+    {% if next_url %}
+      <div class="load-more" data-more>
+        <a class="more more--line" href="{{ next_url }}" data-load-more><span>{{ projects_page.load_more_label }}</span> {% include "_arrow.html" %}</a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
